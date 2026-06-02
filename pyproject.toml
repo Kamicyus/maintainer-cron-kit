@@ -1,0 +1,33 @@
+[build-system]
+requires = ["hatchling>=1.25"]
+build-backend = "hatchling.build"
+
+[project]
+name = "maintainer-cron-kit"
+version = "0.1.0"
+description = "Zero-dependency GitHub Actions helpers for open-source maintainer triage, release notes, and project health checks."
+readme = "README.md"
+requires-python = ">=3.11"
+license = "MIT"
+authors = [{ name = "Kamer Can Izvermez" }]
+keywords = ["github-actions", "open-source", "maintainers", "triage", "release-notes"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Software Development :: Version Control :: Git",
+]
+
+[project.urls]
+Homepage = "https://github.com/Kamicyus/maintainer-cron-kit"
+Issues = "https://github.com/Kamicyus/maintainer-cron-kit/issues"
+
+[project.scripts]
+mck = "maintainer_cron_kit.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/maintainer_cron_kit"]
+
