@@ -48,6 +48,23 @@ Generate release-note draft material from recently closed pull requests:
 mck release-notes owner/repo --days 30 --output RELEASE_DRAFT.md
 ```
 
+Markdown remains the default. Use JSON for scripts or structured processing:
+
+```bash
+mck digest owner/repo --format json
+mck release-notes owner/repo --days 30 --format json --output release-notes.json
+```
+
+For GitHub Enterprise Server, set the API base URL (including `/api/v3`):
+
+```bash
+GITHUB_API_URL=https://github.example.com/api/v3 mck digest owner/repo
+```
+
+`GITHUB_API_URL` defaults to `https://api.github.com` when unset or empty.
+Use `owner/repo` for Enterprise repositories; trailing slashes are accepted.
+Only set this URL to a trusted API host: configured authentication is sent there.
+
 Check workflow environment readiness:
 
 ```bash
@@ -100,6 +117,8 @@ This project is intentionally useful without AI. Codex can be added on top of th
 - review workflow and security-sensitive changes;
 - draft release notes from merged pull requests;
 - summarize stale threads before maintainer review.
+
+Start with the [read-only Codex prompt pack](docs/prompts/README.md) to review generated Markdown artifacts.
 
 Only run automated review on repositories you own, maintain, or have explicit permission to administer.
 

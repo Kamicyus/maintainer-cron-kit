@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+- Add optional JSON output for digests and release-note drafts, preserving default Markdown output.
+- Read `GITHUB_API_URL` at request time and document GitHub Enterprise Server configuration.
+- Add a read-only Codex prompt pack for reviewing generated Markdown artifacts.
+
 ## 0.1.0 - 2026-06-02
 
 - Add `mck digest` for read-only issue and pull request maintainer summaries.
