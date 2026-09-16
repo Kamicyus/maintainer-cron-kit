@@ -9,7 +9,7 @@ from typing import Any
 
 from .models import GitHubItem
 
-GITHUB_API = os.environ.get("GITHUB_API_URL", "https://api.github.com").rstrip("/")
+GITHUB_API = "https://api.github.com"
 
 
 def parse_repo(value: str) -> str:
@@ -61,7 +61,8 @@ def fetch_recent_items(repo: str, days: int, limit: int = 100, token: str | None
             "per_page": min(max(limit, 1), 100),
         }
     )
-    data = fetch_json(f"{GITHUB_API}/repos/{repo}/issues?{query}", token=token)
+    api_url = (os.environ.get("GITHUB_API_URL") or GITHUB_API).rstrip("/")
+    data = fetch_json(f"{api_url}/repos/{repo}/issues?{query}", token=token)
     return [item_from_api(raw) for raw in data[:limit]]
 
 
