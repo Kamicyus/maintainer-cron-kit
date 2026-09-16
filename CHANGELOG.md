@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.2.0 - 2026-09-16
 
 - Add optional JSON output for digests and release-note drafts, preserving default Markdown output.
 - Read `GITHUB_API_URL` at request time and document GitHub Enterprise Server configuration.

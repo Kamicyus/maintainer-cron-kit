@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "maintainer-cron-kit"
-version = "0.1.0"
+version = "0.2.0"
 description = "Zero-dependency GitHub Actions helpers for open-source maintainer triage, release notes, and project health checks."
 readme = "README.md"
 requires-python = ">=3.11"
