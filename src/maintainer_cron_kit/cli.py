@@ -8,7 +8,12 @@ from pathlib import Path
 from . import __version__
 from .analyze import build_digest
 from .github import fetch_recent_items, parse_repo
-from .render import render_digest, render_release_notes
+from .render import (
+    render_digest,
+    render_digest_json,
+    render_release_notes,
+    render_release_notes_json,
+)
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -48,7 +53,11 @@ def add_repo_args(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("repo", help="Repository as owner/repo or https://github.com/owner/repo")
     parser.add_argument("--days", type=int, default=7, help="Activity window in days.")
     parser.add_argument("--limit", type=int, default=100, help="Maximum GitHub items to fetch.")
-    parser.add_argument("--output", "-o", help="Write Markdown to this file instead of stdout.")
+    parser.add_argument(
+        "--format", choices=("markdown", "json"), default="markdown",
+        help="Output format (default: markdown).",
+    )
+    parser.add_argument("--output", "-o", help="Write output to this file instead of stdout.")
     parser.add_argument(
         "--token-env",
         default="GITHUB_TOKEN",
@@ -61,7 +70,8 @@ def cmd_digest(args: argparse.Namespace) -> int:
     token = os.environ.get(args.token_env)
     items = fetch_recent_items(repo, days=args.days, limit=args.limit, token=token)
     digest = build_digest(repo, items, days=args.days, stale_days=args.stale_days)
-    write_output(render_digest(digest), args.output)
+    renderer = render_digest_json if args.format == "json" else render_digest
+    write_output(renderer(digest), args.output)
     return 0
 
 
@@ -69,7 +79,8 @@ def cmd_release_notes(args: argparse.Namespace) -> int:
     repo = parse_repo(args.repo)
     token = os.environ.get(args.token_env)
     items = fetch_recent_items(repo, days=args.days, limit=args.limit, token=token)
-    write_output(render_release_notes(repo, items, days=args.days), args.output)
+    renderer = render_release_notes_json if args.format == "json" else render_release_notes
+    write_output(renderer(repo, items, days=args.days), args.output)
     return 0
 
 

@@ -1,7 +1,9 @@
 from __future__ import annotations
 
+import json
 from collections import defaultdict
-from datetime import timezone
+from dataclasses import asdict
+from datetime import datetime, timezone
 
 from .models import Digest, GitHubItem
 
@@ -100,3 +102,21 @@ def group_for(item: GitHubItem) -> str:
 def format_dt(value) -> str:
     return value.astimezone(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
 
+
+def json_datetime(value: datetime) -> str:
+    return value.astimezone(timezone.utc).isoformat().replace("+00:00", "Z")
+
+
+def render_digest_json(digest: Digest) -> str:
+    return json.dumps(asdict(digest), default=json_datetime, ensure_ascii=False, indent=2)
+
+
+def render_release_notes_json(repo: str, items: list[GitHubItem], days: int) -> str:
+    groups: dict[str, list[dict]] = {}
+    for item in sorted(items, key=lambda item: item.number):
+        if item.is_pull_request and item.state == "closed":
+            groups.setdefault(group_for(item), []).append(asdict(item))
+    return json.dumps(
+        {"repo": repo, "days": days, "groups": groups},
+        default=json_datetime, ensure_ascii=False, indent=2,
+    )
